@@ -484,7 +484,12 @@ function StepBudget({ name, onNext, onBack, instant, onAnimated }) {
     if (instant || !allDone) return;
     const t = setTimeout(() => {
       setTotalDone(true);
-      if (!reduced) endRef.current?.scrollIntoView({ block: "end", behavior: "smooth" });
+      // settle smoothly at the very bottom (total + button), no jump upward
+      if (!reduced) {
+        requestAnimationFrame(() =>
+          window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" })
+        );
+      }
     }, 950);
     return () => clearTimeout(t);
   }, [allDone, reduced, instant]);
@@ -626,10 +631,10 @@ function StepSummary({ onBack }) {
         </div>
       </div>
 
-      {/* insight - purple card, clean quote badge */}
-      <div style={{ position: "relative", background: `linear-gradient(150deg, ${PURPLE}, ${PURPLE_DEEP})`, borderRadius: 24, padding: "26px 24px", boxShadow: "0 16px 34px rgba(91,79,214,0.34)", overflow: "hidden" }}>
+      {/* insight - dark green card, lime quote badge */}
+      <div style={{ position: "relative", background: `linear-gradient(150deg, ${GREEN_DARK}, ${GREEN_DARK2})`, borderRadius: 24, padding: "26px 24px", boxShadow: "0 16px 34px rgba(25,69,54,0.34)", overflow: "hidden" }}>
         <div style={{ width: 40, height: 40, borderRadius: 13, background: LIME, display: "grid", placeItems: "center", marginBottom: 16 }}>
-          <svg width="20" height="16" viewBox="0 0 20 16" fill={PURPLE_DEEP}><path d="M8 0C3.6 0 0 3.6 0 8v8h8V8H4c0-2.2 1.8-4 4-4V0zM20 0c-4.4 0-8 3.6-8 8v8h8V8h-4c0-2.2 1.8-4 4-4V0z" /></svg>
+          <svg width="20" height="16" viewBox="0 0 20 16" fill={GREEN_DARK}><path d="M8 0C3.6 0 0 3.6 0 8v8h8V8H4c0-2.2 1.8-4 4-4V0zM20 0c-4.4 0-8 3.6-8 8v8h8V8h-4c0-2.2 1.8-4 4-4V0z" /></svg>
         </div>
         <p style={{ fontFamily: FONT, fontSize: 16.5, lineHeight: 1.6, color: "#fff", margin: 0, fontWeight: 500 }}>
           Membangun hidroponik sendiri itu <b style={{ color: LIME }}>mungkin</b>. Tapi memilih material yang tepat, menghitung kebutuhan, dan trial &amp; error butuh <b style={{ color: LIME }}>waktu serta pengalaman</b>.
@@ -736,6 +741,8 @@ export default function App() {
       document.head.appendChild(meta);
     }
     meta.setAttribute("content", color);
+    // paint body/edges to match the page so there is no white seam or overscroll flash
+    document.body.style.backgroundColor = color;
 
     return () => {
       cancelAnimationFrame(r);
@@ -758,8 +765,8 @@ export default function App() {
     <>
       <style>{`@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');`}</style>
 
-      <div style={{ minHeight: "100dvh", width: "100%", display: "flex", justifyContent: "center", background: MINT_BOT, fontFamily: FONT }}>
-        <div style={{ width: "100%", maxWidth: 430, minHeight: "100dvh", background: MINT_TOP, position: "relative", overflowX: "hidden", boxShadow: "0 0 60px rgba(0,0,0,0.08)" }}>
+      <div style={{ minHeight: "100dvh", width: "100%", display: "flex", justifyContent: "center", background: page === 0 ? GREEN_DARK : MINT_BOT, fontFamily: FONT }}>
+        <div style={{ width: "100%", maxWidth: 430, minHeight: "100dvh", background: page === 0 ? GREEN_DARK : MINT_TOP, position: "relative", overflowX: "hidden", boxShadow: "0 0 60px rgba(0,0,0,0.08)" }}>
           <div key={page} style={{ animation: `slideIn 300ms ${EASE}` }}>
             {pages[page]}
           </div>
