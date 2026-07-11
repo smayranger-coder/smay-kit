@@ -19,8 +19,8 @@ const PURPLE_DEEP = "#5B4FD6";
 const INK = "#1E2A16";
 const SUBT = "#6E7A66";
 const CARD = "#FFFFFF";
-const MINT_TOP = "#F5FBF4";
-const MINT_BOT = "#EAF3E4";
+const MINT_TOP = "#EEF5EA";
+const MINT_BOT = "#EEF5EA";
 const ICON_BG = "#F9F9F9";
 const EASE = "cubic-bezier(0.22, 1, 0.36, 1)";
 
@@ -544,7 +544,7 @@ function StepBudget({ name, onNext, onBack, instant, onAnimated }) {
       <div ref={endRef} />
 
       {/* sticky CTA + purple toast */}
-      <div style={{ position: "sticky", bottom: 0, marginLeft: -22, marginRight: -22, marginTop: 24, padding: "16px 22px calc(16px + env(safe-area-inset-bottom))", background: `linear-gradient(180deg, rgba(234,243,228,0) 0%, ${MINT_BOT} 34%)` }}>
+      <div style={{ position: "sticky", bottom: 0, marginLeft: -22, marginRight: -22, marginTop: 24, padding: "16px 22px calc(16px + env(safe-area-inset-bottom))", background: `linear-gradient(180deg, rgba(238,245,234,0) 0%, ${MINT_BOT} 34%)` }}>
         <div style={{ position: "relative" }}>
           {totalDone && (
             <div style={{ position: "absolute", left: 0, right: 0, bottom: "calc(100% + 12px)", display: "flex", justifyContent: "center", animation: `toastUp 380ms ${EASE} both` }}>
@@ -594,8 +594,7 @@ function VideoCard() {
         <span style={{ position: "absolute", top: 14, right: 14, background: "rgba(0,0,0,0.6)", color: "#fff", fontFamily: FONT, fontSize: 11.5, fontWeight: 700, padding: "5px 10px", borderRadius: 99 }}>Video</span>
       </div>
       <div style={{ padding: "16px 20px" }}>
-        <div style={{ fontFamily: FONT, fontSize: 16, fontWeight: 700, color: INK }}>Lihat cara rakit Lego Hydroponic Smay</div>
-        <div style={{ fontFamily: FONT, fontSize: 13, color: SUBT, marginTop: 4 }}>Ketuk untuk menonton di TikTok</div>
+        <div style={{ fontFamily: FONT, fontSize: 16, fontWeight: 700, color: INK }}>Lihat Lego Hydroponic SMAY!</div>
       </div>
     </Card>
   );
