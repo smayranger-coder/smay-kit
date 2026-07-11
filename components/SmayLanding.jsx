@@ -333,7 +333,7 @@ function StepWelcome({ onNext }) {
   const [name, setName] = useState("");
   const valid = name.trim().length > 0;
   return (
-    <div style={{ minHeight: "100%", padding: "30px 24px 40px", display: "flex", flexDirection: "column", background: GREEN_DARK }}>
+    <div style={{ minHeight: "100dvh", padding: "30px 24px calc(40px + env(safe-area-inset-bottom))", display: "flex", flexDirection: "column", background: GREEN_DARK }}>
       <Stepper step={1} onDark />
 
       <div style={{ position: "relative", marginTop: 10, display: "flex", flexDirection: "column", alignItems: "center" }}>
@@ -502,7 +502,7 @@ function StepBudget({ name, onNext, onBack, instant, onAnimated }) {
   ];
 
   return (
-    <div style={{ minHeight: "100%", padding: "30px 22px 150px", background: `linear-gradient(180deg,${MINT_TOP},${MINT_BOT})` }}>
+    <div style={{ minHeight: "100dvh", padding: "30px 22px 150px", background: `linear-gradient(180deg,${MINT_TOP},${MINT_BOT})` }}>
       <Stepper step={2} onBack={onBack} />
       <h1 style={{ fontFamily: FONT, fontSize: 30, fontWeight: 800, color: INK, margin: 0, letterSpacing: -0.4 }}>Hai, {name}! 👋</h1>
       <p style={{ fontFamily: FONT, fontSize: 15.5, color: SUBT, lineHeight: 1.55, marginTop: 12, marginBottom: 24 }}>
@@ -606,7 +606,7 @@ function Check() {
 
 function StepSummary({ onBack }) {
   return (
-    <div style={{ minHeight: "100%", padding: "30px 22px 56px", background: `linear-gradient(180deg,${MINT_TOP},${MINT_BOT})` }}>
+    <div style={{ minHeight: "100dvh", padding: "30px 22px 56px", background: `linear-gradient(180deg,${MINT_TOP},${MINT_BOT})` }}>
       <Stepper step={3} onBack={onBack} />
 
       {/* single comic-style bubble */}
@@ -712,13 +712,40 @@ function StepSummary({ onBack }) {
 export default function App() {
   const [page, setPage] = useState(0);
   const [name, setName] = useState("");
-  const scrollRef = useRef(null);
   const budgetSeen = useRef(false); // animate budget only once, ever
+
+  // disable browser scroll restoration once
+  useEffect(() => {
+    if (typeof history !== "undefined" && "scrollRestoration" in history) {
+      history.scrollRestoration = "manual";
+    }
+  }, []);
+
+  // on every page change: jump to top + tint the status bar to match the page
+  useEffect(() => {
+    const reset = () => window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+    reset();
+    const r = requestAnimationFrame(reset);
+    const t = setTimeout(reset, 60);
+
+    const color = page === 0 ? GREEN_DARK : MINT_TOP;
+    let meta = document.querySelector('meta[name="theme-color"]');
+    if (!meta) {
+      meta = document.createElement("meta");
+      meta.setAttribute("name", "theme-color");
+      document.head.appendChild(meta);
+    }
+    meta.setAttribute("content", color);
+
+    return () => {
+      cancelAnimationFrame(r);
+      clearTimeout(t);
+    };
+  }, [page]);
 
   const go = (next, savedName) => {
     if (savedName) setName(savedName);
     setPage(next);
-    if (scrollRef.current) scrollRef.current.scrollTop = 0;
   };
 
   const pages = [
@@ -731,9 +758,9 @@ export default function App() {
     <>
       <style>{`@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');`}</style>
 
-      <div style={{ minHeight: "100vh", width: "100%", display: "flex", justifyContent: "center", background: MINT_BOT, fontFamily: FONT }}>
-        <div ref={scrollRef} style={{ width: "100%", maxWidth: 430, minHeight: "100vh", background: MINT_TOP, position: "relative", overflowY: "auto", overflowX: "hidden", boxShadow: "0 0 60px rgba(0,0,0,0.08)" }}>
-          <div key={page} style={{ animation: `slideIn 300ms ${EASE}`, minHeight: "100vh" }}>
+      <div style={{ minHeight: "100dvh", width: "100%", display: "flex", justifyContent: "center", background: MINT_BOT, fontFamily: FONT }}>
+        <div style={{ width: "100%", maxWidth: 430, minHeight: "100dvh", background: MINT_TOP, position: "relative", overflowX: "hidden", boxShadow: "0 0 60px rgba(0,0,0,0.08)" }}>
+          <div key={page} style={{ animation: `slideIn 300ms ${EASE}` }}>
             {pages[page]}
           </div>
         </div>
