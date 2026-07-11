@@ -631,10 +631,10 @@ function StepSummary({ onBack }) {
         </div>
       </div>
 
-      {/* insight - dark green card, lime quote badge */}
-      <div style={{ position: "relative", background: `linear-gradient(150deg, ${GREEN_DARK}, ${GREEN_DARK2})`, borderRadius: 24, padding: "26px 24px", boxShadow: "0 16px 34px rgba(25,69,54,0.34)", overflow: "hidden" }}>
+      {/* insight - purple card, lime quote badge */}
+      <div style={{ position: "relative", background: `linear-gradient(150deg, ${PURPLE}, ${PURPLE_DEEP})`, borderRadius: 24, padding: "26px 24px", boxShadow: "0 16px 34px rgba(91,79,214,0.34)", overflow: "hidden" }}>
         <div style={{ width: 40, height: 40, borderRadius: 13, background: LIME, display: "grid", placeItems: "center", marginBottom: 16 }}>
-          <svg width="20" height="16" viewBox="0 0 20 16" fill={GREEN_DARK}><path d="M8 0C3.6 0 0 3.6 0 8v8h8V8H4c0-2.2 1.8-4 4-4V0zM20 0c-4.4 0-8 3.6-8 8v8h8V8h-4c0-2.2 1.8-4 4-4V0z" /></svg>
+          <svg width="20" height="16" viewBox="0 0 20 16" fill={PURPLE_DEEP}><path d="M8 0C3.6 0 0 3.6 0 8v8h8V8H4c0-2.2 1.8-4 4-4V0zM20 0c-4.4 0-8 3.6-8 8v8h8V8h-4c0-2.2 1.8-4 4-4V0z" /></svg>
         </div>
         <p style={{ fontFamily: FONT, fontSize: 16.5, lineHeight: 1.6, color: "#fff", margin: 0, fontWeight: 500 }}>
           Membangun hidroponik sendiri itu <b style={{ color: LIME }}>mungkin</b>. Tapi memilih material yang tepat, menghitung kebutuhan, dan trial &amp; error butuh <b style={{ color: LIME }}>waktu serta pengalaman</b>.
@@ -734,6 +734,8 @@ export default function App() {
     const t = setTimeout(reset, 60);
 
     const color = page === 0 ? GREEN_DARK : MINT_TOP;
+    // body uses the gradient BOTTOM color on mint pages so the footer/overscroll blends seamlessly
+    const bodyColor = page === 0 ? GREEN_DARK : MINT_BOT;
     let meta = document.querySelector('meta[name="theme-color"]');
     if (!meta) {
       meta = document.createElement("meta");
@@ -742,7 +744,7 @@ export default function App() {
     }
     meta.setAttribute("content", color);
     // paint body/edges to match the page so there is no white seam or overscroll flash
-    document.body.style.backgroundColor = color;
+    document.body.style.backgroundColor = bodyColor;
 
     return () => {
       cancelAnimationFrame(r);
