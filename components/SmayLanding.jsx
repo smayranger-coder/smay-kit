@@ -44,48 +44,54 @@ const easeOutCubic = (t) => 1 - Math.pow(1 - t, 3);
 /* ---------- lib/data ---------- */
 const BUDGET = [
   {
-    title: "Struktur",
-    icon: "🟢",
+    title: "Struktur Utama",
+    icon: "🏗️",
     rows: [
-      { name: "Gully UPVC", spec: "8 Meter", price: 700000 },
-      { name: "Rangka Hollow", spec: "20 × 20 mm · 12 Batang", price: 540000 },
-      { name: "Atap UV", spec: "2 Lembar", price: 240000 },
-      { name: "Spring Clip", spec: "40 pcs", price: 90000 },
+      { name: "Gully 8 meter", price: 700000 },
+      { name: "Atap UV 4m", price: 200000 },
+      { name: "Spring Clip 4m", price: 90000 },
     ],
   },
   {
-    title: "Sistem Air",
+    title: "Pipa & Sambungan",
+    icon: "🛠️",
+    rows: [
+      { name: "Pipa Paralon UPVC", price: 200000 },
+      { name: "Joiner + End Cap + Drain", price: 150000 },
+      { name: 'Pipa 1" (5 lonjor)', price: 350000 },
+      { name: "Knee Tee 4 way", price: 180000 },
+      { name: "Knee Tee 5 way", price: 180000 },
+      { name: 'Knee 1"', price: 70000 },
+      { name: 'Pipa 2"', price: 100000 },
+      { name: 'T Pipa 2"', price: 20000 },
+      { name: 'Knee 2"', price: 15000 },
+    ],
+  },
+  {
+    title: "Sistem Air & Aksesoris",
     icon: "💧",
     rows: [
-      { name: "Bak Nutrisi", spec: "120 Liter", price: 220000 },
-      { name: "Pompa Air", spec: "18 Watt", price: 180000 },
-      { name: "PVC Pipe", spec: "1 Inch · 6 Meter", price: 95000 },
-      { name: "Selang", spec: "10 Meter", price: 45000 },
-      { name: "Valve", spec: "2 pcs", price: 35000 },
-      { name: "Elbow", spec: "8 pcs", price: 28000 },
-      { name: "Tee Joint", spec: "6 pcs", price: 24000 },
-    ],
-  },
-  {
-    title: "Growing Kit",
-    icon: "🌱",
-    rows: [
-      { name: "Netpot", spec: "72 pcs", price: 216000 },
-      { name: "Rockwool", spec: "1 Pack", price: 85000 },
-      { name: "AB Mix", spec: "5 Liter", price: 175000 },
-      { name: "Benih Premium", spec: "1 Pack", price: 95000 },
-      { name: "Timer", spec: "1 pcs", price: 90000 },
-      { name: "Insect Net", spec: "1 Roll", price: 82000 },
-      { name: "Cable Tie", spec: "1 Pack", price: 70000 },
+      { name: "Pompa air", price: 250000 },
+      { name: "Selang 12 mm", price: 80000 },
+      { name: "Selang 7 mm", price: 25000 },
+      { name: "Insect Net", price: 150000 },
+      { name: "Mata Bor + Hole Saw", price: 250000 },
     ],
   },
 ];
+
+const RND = [
+  ["🌊", "Sistem NFT", "Revisi desain, kemiringan air, pompa, dan distribusi nutrisi."],
+  ["🧩", "User Experience", "Instalasi sederhana, penomoran komponen, dan kemudahan perakitan."],
+  ["🌱", "Trial & Error", "Benih gagal, tanaman mati, material terbuang, lalu mencoba lagi."],
+  ["⏳", "Waktu", "Ratusan jam belajar, bereksperimen, dan menyempurnakan sistem."],
+];
+
 const GRAND_TOTAL = BUDGET.reduce((s, c) => s + c.rows.reduce((a, r) => a + r.price, 0), 0);
 
 const WHY = [
-  ["🥬", "Kualitas Premium", "Sayuran segar berkualitas tinggi, konsisten tiap panen."],
   ["🧩", "Rakit Seperti Lego", "Semua part sudah bernomor. Tinggal pasang."],
-  ["🛡️", "Material Food-safe", "UPVC food grade, lebih aman dan awet."],
+  ["🛡️", "Material Food-safe", "UPVC food grade aman & awet."],
   ["🎓", "Pelatihan GRATIS", "Dibimbing langsung sampai berhasil panen."],
   ["🔬", "Tanpa Trial & Error", "Risetnya sudah kami lakukan. Kamu tinggal mulai."],
 ];
@@ -203,9 +209,9 @@ function Stepper({ step, onBack, onDark }) {
           <button
             onClick={onBack}
             aria-label="Kembali"
-            style={{ width: 34, height: 34, borderRadius: 99, border: "none", flex: "0 0 auto", background: "#fff", boxShadow: "0 3px 10px rgba(31,43,22,0.1)", cursor: "pointer", fontSize: 16, color: INK, display: "grid", placeItems: "center" }}
+            style={{ width: 36, height: 36, borderRadius: 99, border: "none", flex: "0 0 auto", background: "#fff", boxShadow: "0 3px 10px rgba(31,43,22,0.1)", cursor: "pointer", fontSize: 17, color: INK, display: "grid", placeItems: "center" }}
           >
-            ←
+            &#8592;
           </button>
         )}
         <div style={{ display: "flex", gap: 7, flex: 1 }}>
@@ -321,7 +327,7 @@ function MascotImg({ width = 150, style }) {
 function MithaAvatar({ size = 54 }) {
   return (
     <div style={{ width: size, height: size, borderRadius: "50%", background: "#fff", flex: "0 0 auto", display: "grid", placeItems: "end center", overflow: "hidden", boxShadow: "0 3px 10px rgba(31,43,22,0.12)" }}>
-      <img src={MITHA_URI} alt="Mitha" style={{ width: "88%", height: "auto", display: "block" }} draggable={false} />
+      <img src={MITHA_URI} alt="Mitha" style={{ width: "64%", height: "auto", display: "block", marginBottom: "8%" }} draggable={false} />
     </div>
   );
 }
@@ -351,8 +357,7 @@ function StepWelcome({ onNext }) {
         Kenalan dulu, yuk!
       </h1>
       <p style={{ fontFamily: FONT, fontSize: 15.5, color: "rgba(255,255,255,0.82)", lineHeight: 1.55, marginTop: 12 }}>
-        Aku bakal nunjukin berapa biaya bikin kebun hidroponik seperti punyaku. Santai, ku-jelasin
-        pelan-pelan 🌱
+        Di sini aku mau sharing breakdown biaya bikin sistem hidroponik 72 lubang yang aku pakai di Smay!
       </p>
 
       <div style={{ marginTop: "auto", paddingTop: 26 }}>
@@ -412,7 +417,6 @@ function PriceRow({ row, active, onDone, last, instant }) {
     >
       <div style={{ paddingRight: 12 }}>
         <div style={{ fontFamily: FONT, fontSize: 15.5, color: INK, fontWeight: 500 }}>{row.name}</div>
-        <div style={{ fontFamily: FONT, fontSize: 12.5, color: "#9AA792", marginTop: 2 }}>{row.spec}</div>
       </div>
       <span style={{ fontFamily: FONT, fontSize: 15.5, fontWeight: 700, whiteSpace: "nowrap", color: show ? INK : "#B7C4AE", fontVariantNumeric: "tabular-nums" }}>{rp(n)}</span>
     </div>
@@ -541,6 +545,24 @@ function StepBudget({ name, onNext, onBack, instant, onAnimated }) {
         <div style={{ fontFamily: FONT, fontSize: 29, fontWeight: 800, color: "#fff", fontVariantNumeric: "tabular-nums", letterSpacing: -0.3 }}>{rp(totalN)}</div>
       </div>
 
+      {/* R&D: harga material hanya sebagian kecil */}
+      <div style={{ marginTop: 26 }}>
+        <Card style={{ padding: 20 }}>
+          <p style={{ fontFamily: FONT, fontSize: 14.5, color: INK, lineHeight: 1.6, margin: "0 0 16px", fontWeight: 500 }}>
+            Harga material hanyalah sebagian kecil dari proses membangun sebuah sistem. Di baliknya ada...
+          </p>
+          {RND.map(([icon, title, desc], i) => (
+            <div key={title} style={{ display: "flex", gap: 12, alignItems: "flex-start", padding: "12px 0", borderBottom: i === RND.length - 1 ? "none" : "1px solid #F0F4EE" }}>
+              <span style={{ width: 34, height: 34, borderRadius: 11, background: ICON_BG, display: "grid", placeItems: "center", flex: "0 0 auto", fontSize: 17 }}>{icon}</span>
+              <div style={{ flex: 1 }}>
+                <div style={{ fontFamily: FONT, fontSize: 14.5, fontWeight: 800, color: INK }}>{title}</div>
+                <div style={{ fontFamily: FONT, fontSize: 13, color: SUBT, marginTop: 3, lineHeight: 1.45 }}>{desc}</div>
+              </div>
+            </div>
+          ))}
+        </Card>
+      </div>
+
       <div ref={endRef} />
 
       {/* sticky CTA + purple toast */}
@@ -555,7 +577,7 @@ function StepBudget({ name, onNext, onBack, instant, onAnimated }) {
             </div>
           )}
           <Button disabled={!ready} onClick={onNext} pulse>
-            Lanjutkan Kesimpulan
+            Kamu Gak Perlu Trial & Error dari 0
           </Button>
         </div>
       </div>
@@ -609,6 +631,20 @@ function Check() {
 }
 
 function StepSummary({ onBack }) {
+  const ctaRef = useRef(null);
+  const [ctaSticky, setCtaSticky] = useState(true);
+
+  useEffect(() => {
+    const el = ctaRef.current;
+    if (!el) return;
+    const io = new IntersectionObserver(([e]) => setCtaSticky(!e.isIntersecting), {
+      rootMargin: "0px 0px -90px 0px",
+      threshold: 0.1,
+    });
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
   return (
     <div style={{ minHeight: "100dvh", padding: "30px 22px 56px", background: `linear-gradient(180deg,${MINT_TOP},${MINT_BOT})` }}>
       <Stepper step={3} onBack={onBack} />
@@ -617,30 +653,8 @@ function StepSummary({ onBack }) {
       <div style={{ display: "flex", gap: 12, alignItems: "flex-end", marginTop: 6, marginBottom: 28 }}>
         <MithaAvatar size={56} />
         <div style={{ flex: 1, minHeight: 74, background: CARD, borderRadius: "8px 22px 22px 22px", padding: "16px 18px", fontFamily: FONT, fontSize: 15.5, lineHeight: 1.55, color: INK, boxShadow: "0 8px 24px rgba(31,43,22,0.08)" }}>
-          <SubtitleCycler
-            lines={[
-              "Lumayan banyak ya investasinya…",
-              "Aku juga dulu mulai dari sistem sederhana.",
-              "Karena berhasil panen, aku makin semangat, akhirnya aku dan tim Smay riset bertahun-tahun.",
-              "Biar kamu nggak perlu lagi trial & error dari nol.",
-            ]}
-            hold={1200}
-            speed={24}
-          />
+          Smay udah siapin Lego Hidroponik siap pasang buat kamu.
         </div>
-      </div>
-
-      {/* insight - purple card, lime quote badge */}
-      <div style={{ position: "relative", background: `linear-gradient(150deg, ${PURPLE}, ${PURPLE_DEEP})`, borderRadius: 24, padding: "26px 24px", boxShadow: "0 16px 34px rgba(91,79,214,0.34)", overflow: "hidden" }}>
-        <div style={{ width: 40, height: 40, borderRadius: 13, background: LIME, display: "grid", placeItems: "center", marginBottom: 16 }}>
-          <svg width="20" height="16" viewBox="0 0 20 16" fill={PURPLE_DEEP}><path d="M8 0C3.6 0 0 3.6 0 8v8h8V8H4c0-2.2 1.8-4 4-4V0zM20 0c-4.4 0-8 3.6-8 8v8h8V8h-4c0-2.2 1.8-4 4-4V0z" /></svg>
-        </div>
-        <p style={{ fontFamily: FONT, fontSize: 16.5, lineHeight: 1.6, color: "#fff", margin: 0, fontWeight: 500 }}>
-          Membangun hidroponik sendiri itu <b style={{ color: LIME }}>mungkin</b>. Tapi memilih material yang tepat, menghitung kebutuhan, dan trial &amp; error butuh <b style={{ color: LIME }}>waktu serta pengalaman</b>.
-        </p>
-        <p style={{ fontFamily: FONT, fontSize: 16.5, lineHeight: 1.6, color: "#fff", marginTop: 12, marginBottom: 0, fontWeight: 500 }}>
-          <b style={{ color: LIME }}>Smay sudah melewati semuanya.</b> Kamu tinggal rakit, tanam, dan panen.
-        </p>
       </div>
 
       <h2 style={{ fontFamily: FONT, fontSize: 25, fontWeight: 800, color: INK, margin: "32px 0 16px", letterSpacing: -0.3 }}>Kenapa Sistem Smay?</h2>
@@ -689,23 +703,42 @@ function StepSummary({ onBack }) {
             ))}
           </div>
 
-          <div style={{ marginTop: 22 }}>
-            <Button pulse onClick={() => window.open(WHATSAPP_URL, "_blank")}>
-              Minta Pricelist
-            </Button>
-          </div>
-          <div style={{ marginTop: 12 }}>
-            <Button variant="white" onClick={() => window.open(LYNK_URL, "_blank")}>
-              Ikuti Perjalanan Smay
-            </Button>
+          <div ref={ctaRef} style={{ marginTop: 22, minHeight: 58 }}>
+            {!ctaSticky && (
+              <Button pulse onClick={() => { window.location.href = "/pricelist"; }} style={{ whiteSpace: "nowrap", fontSize: 15.5, padding: "17px 12px" }}>
+                Info System Hydroponic SMAY!
+              </Button>
+            )}
           </div>
         </div>
       </div>
 
+      {/* ending: observasi dulu? ikuti perjalanan */}
+      <div style={{ marginTop: 26, textAlign: "center", padding: "0 4px" }}>
+        <p style={{ fontFamily: FONT, fontSize: 14.5, color: SUBT, lineHeight: 1.6, margin: "0 0 16px" }}>
+          Kalau kamu masih mau observasi dulu sebelum mulai, boleh banget ikutin movement kita dan
+          perjalanan Smay buat turning urban farming into a lifestyle.
+        </p>
+        <Button variant="white" onClick={() => window.open(LYNK_URL, "_blank")}>
+          Ikuti Perjalanan SMAY!
+        </Button>
+      </div>
+
       {/* footer - logo only, bigger, centered */}
       <div style={{ display: "flex", justifyContent: "center", marginTop: 30 }}>
-        <img src={LOGO_URI} alt="SMAY!" style={{ height: 84, width: "auto" }} />
+        <img src={LOGO_URI} alt="SMAY!" style={{ height: 150, width: "auto" }} />
       </div>
+
+      {/* sticky CTA: floating sampai tombol di card kelihatan, lalu berhenti di card */}
+      {ctaSticky && (
+        <div style={{ position: "fixed", left: 0, right: 0, bottom: 0, zIndex: 50, display: "flex", justifyContent: "center", pointerEvents: "none", animation: `toastUp 300ms ${EASE} both` }}>
+          <div style={{ width: "100%", maxWidth: 430, boxSizing: "border-box", padding: "14px 22px calc(16px + env(safe-area-inset-bottom))", background: `linear-gradient(180deg, rgba(238,245,234,0) 0%, ${MINT_BOT} 38%)`, pointerEvents: "auto" }}>
+            <Button pulse onClick={() => { window.location.href = "/pricelist"; }} style={{ whiteSpace: "nowrap", fontSize: 15.5, padding: "17px 12px" }}>
+              Info System Hydroponic SMAY!
+            </Button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
