@@ -3,6 +3,7 @@ import { Analytics } from "@vercel/analytics/react";
 
 const TITLE = "Siap Punya Kebun Sendiri? - SMAY!";
 const DESC = "Lihat breakdown biaya bikin sistem hidroponik 72 lubang, dan kenapa Smay bikin semuanya jadi lebih gampang.";
+const OG = "/og-v2.png";
 
 export const metadata = {
   title: TITLE,
@@ -13,13 +14,13 @@ export const metadata = {
     type: "website",
     locale: "id_ID",
     siteName: "SMAY!",
-    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: TITLE }],
+    images: [{ url: OG, width: 1200, height: 630, alt: TITLE }],
   },
   twitter: {
     card: "summary_large_image",
     title: TITLE,
     description: DESC,
-    images: ["/og-image.png"],
+    images: [OG],
   },
 };
 

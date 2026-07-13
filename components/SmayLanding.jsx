@@ -27,7 +27,7 @@ const EASE = "cubic-bezier(0.22, 1, 0.36, 1)";
 const FONT = "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif";
 
 const WHATSAPP_URL =
-  "https://wa.me/6282211112355?text=" +
+  "https://wa.me/6285159510611?text=" +
   encodeURIComponent("Halo Smay! Aku mau minta pricelist Lego Hydroponic 🌱");
 const LYNK_URL = "https://lynk.id/smayranger";
 const SHOPEE_URL = "https://shopee.co.id/opaanlp/93053250/23126882937";
@@ -89,6 +89,37 @@ const RND = [
 ];
 
 const GRAND_TOTAL = BUDGET.reduce((s, c) => s + c.rows.reduce((a, r) => a + r.price, 0), 0);
+
+const SYSTEMS = {
+  36: {
+    holes: 36,
+    sizeLabel: "Compact Size",
+    dimChips: [["PANJANG", "100"], ["LEBAR", "65"], ["TINGGI", "227"]],
+    blurb: "Cocok untuk rumah dan area outdoor kecil. Mudah dirawat, panen segar tiap hari.",
+    prices: { system: 2240000, full: 2790000 },
+    best: "full",
+  },
+  72: {
+    holes: 72,
+    sizeLabel: "Standard Size",
+    dimChips: [["PANJANG", "100"], ["LEBAR", "137"], ["TINGGI", "227"]],
+    blurb: "Dibuat untuk rumah, kafe, restoran, resort, dan lifestyle venue. Hasil lebih banyak, tampilan menarik, suplai konsisten.",
+    prices: { system: 2940000, full: 3490000 },
+    best: "full",
+  },
+};
+
+const PLAN_FEATURES = [
+  { name: (h) => `Sistem Hidroponik ${h} Lubang`, system: true, full: true },
+  { name: (h) => `${h} Net Pot`, system: true, full: true },
+  { name: () => "Pompa Air & Reservoir", system: true, full: true },
+  { name: () => "Rockwool & Growing Media", system: false, full: true },
+  { name: () => "Benih Premium", system: false, full: true },
+  { name: () => "Nutrisi Hidroponik", system: false, full: true },
+  { name: () => "Gelas Ukur, TDS & pH Meter", system: false, full: true },
+];
+
+const idr = (v) => "IDR " + v.toLocaleString("id-ID");
 
 const WHY = [
   ["🧩", "Rakit Seperti Lego", "Semua part sudah bernomor. Tinggal pasang."],
@@ -571,16 +602,145 @@ function StepBudget({ name, onNext, onBack, instant, onAnimated }) {
         <div style={{ position: "relative" }}>
           {totalDone && (
             <div style={{ position: "absolute", left: 0, right: 0, bottom: "calc(100% + 12px)", display: "flex", justifyContent: "center", animation: `toastUp 380ms ${EASE} both` }}>
-              <div style={{ position: "relative", background: PURPLE, color: "#fff", fontFamily: FONT, fontSize: 15, fontWeight: 600, padding: "13px 18px", borderRadius: 16, boxShadow: "0 12px 26px rgba(121,107,231,0.4)", maxWidth: "92%", textAlign: "center" }}>
-                {instant ? "Tapi tenang…" : <SubtitleCycler lines={["Banyak ya investasinya…", "Tapi tenang…"]} hold={750} speed={30} onDone={onToastDone} />}
+              <div style={{ position: "relative", background: PURPLE, color: "#fff", fontFamily: FONT, fontSize: 13.5, fontWeight: 600, padding: "12px 16px", borderRadius: 16, boxShadow: "0 12px 26px rgba(121,107,231,0.4)", maxWidth: "100%", textAlign: "center", whiteSpace: "nowrap" }}>
+                {instant ? "Tapi tenang, kamu gak perlu trial & error dari 0" : <Typewriter text="Tapi tenang, kamu gak perlu trial & error dari 0" speed={26} onDone={onToastDone} />}
                 <span style={{ position: "absolute", left: "50%", top: "100%", transform: "translateX(-50%)", width: 0, height: 0, borderLeft: "9px solid transparent", borderRight: "9px solid transparent", borderTop: `10px solid ${PURPLE}` }} />
               </div>
             </div>
           )}
           <Button disabled={!ready} onClick={onNext} pulse>
-            Kamu Gak Perlu Trial & Error dari 0
+            Pricing System Hydroponic SMAY!
           </Button>
         </div>
+      </div>
+    </div>
+  );
+}
+
+/* ---------- pricing (digabung dari rate card) ---------- */
+function IconCheck({ size = 18 }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 20 20" fill="none">
+      <path d="M4 10.5l4 4 8-9" stroke={LIME_DEEP} strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+function IconCross({ size = 16 }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 20 20" fill="none">
+      <path d="M5 5l10 10M15 5L5 15" stroke={ORANGE} strokeWidth="2.4" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+function AnimatedPrice({ value, style }) {
+  const [display, setDisplay] = useState(value);
+  const [flip, setFlip] = useState(false);
+  useEffect(() => {
+    setFlip(true);
+    const t = setTimeout(() => { setDisplay(value); setFlip(false); }, 140);
+    return () => clearTimeout(t);
+  }, [value]);
+  return (
+    <span style={{ display: "inline-block", opacity: flip ? 0 : 1, transform: flip ? "translateY(6px)" : "translateY(0)", transition: `all 160ms ${EASE}`, ...style }}>
+      {idr(display)}
+    </span>
+  );
+}
+
+function PricingSection() {
+  const [holes, setHoles] = useState(72);
+  const [plan, setPlan] = useState("full");
+  const sys = SYSTEMS[holes];
+  const planLabel = plan === "full" ? "Full Package" : "System Only";
+
+  return (
+    <div>
+      <h2 style={{ fontFamily: FONT, fontSize: 25, fontWeight: 800, color: INK, margin: "0 0 16px", letterSpacing: -0.3 }}>
+        System Hydroponic SMAY!
+      </h2>
+
+      {/* toggle 36 / 72 */}
+      <div style={{ display: "flex", gap: 6, background: "#FFFFFF", padding: 5, borderRadius: 16, boxShadow: "0 6px 18px rgba(31,43,22,0.07)" }}>
+        {[36, 72].map((h) => {
+          const on = holes === h;
+          return (
+            <button
+              key={h}
+              onClick={() => setHoles(h)}
+              style={{ flex: 1, border: "none", cursor: "pointer", padding: "13px 10px", borderRadius: 12, fontFamily: FONT, fontSize: 15, fontWeight: 700, color: on ? "#fff" : SUBT, background: on ? PURPLE : "transparent", boxShadow: on ? "0 6px 16px rgba(121,107,231,0.38)" : "none", transition: `all 240ms ${EASE}` }}
+            >
+              {h} Lubang
+            </button>
+          );
+        })}
+      </div>
+
+      {/* info sistem */}
+      <div key={holes} style={{ background: CARD, borderRadius: 24, padding: 20, marginTop: 16, boxShadow: "0 10px 28px rgba(31,43,22,0.07)", animation: `riseIn 320ms ${EASE}` }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12 }}>
+          <div style={{ fontFamily: FONT, fontSize: 21, fontWeight: 800, color: INK, letterSpacing: -0.4 }}>{sys.holes} Lubang Tanam</div>
+          <span style={{ flex: "0 0 auto", background: "#F1F6EC", color: GREEN_DARK, fontFamily: FONT, fontSize: 10.5, fontWeight: 800, letterSpacing: 0.7, textTransform: "uppercase", padding: "6px 11px", borderRadius: 99 }}>{sys.sizeLabel}</span>
+        </div>
+        <p style={{ fontFamily: FONT, fontSize: 14, color: SUBT, lineHeight: 1.55, margin: "10px 0 16px" }}>{sys.blurb}</p>
+        <div style={{ display: "flex", gap: 8 }}>
+          {sys.dimChips.map(([k, v]) => (
+            <div key={k} style={{ flex: 1, background: "#F4F8F1", borderRadius: 12, padding: "10px 8px", textAlign: "center" }}>
+              <div style={{ fontFamily: FONT, fontSize: 10, fontWeight: 800, color: SUBT, letterSpacing: 0.8 }}>{k}</div>
+              <div style={{ fontFamily: FONT, fontSize: 14.5, fontWeight: 800, color: GREEN_DARK, marginTop: 3 }}>
+                {v} <span style={{ fontSize: 10, fontWeight: 700, color: SUBT }}>cm</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* tab paket */}
+      <div style={{ display: "flex", gap: 10, marginTop: 16 }}>
+        {[{ id: "system", title: "System Only" }, { id: "full", title: "Full Package" }].map((t) => {
+          const on = plan === t.id;
+          const isBest = sys.best === t.id;
+          return (
+            <button
+              key={t.id}
+              onClick={() => setPlan(t.id)}
+              style={{ flex: 1, position: "relative", cursor: "pointer", textAlign: "left", padding: "16px 14px", borderRadius: 18, fontFamily: FONT, background: on ? GREEN_DARK : CARD, border: on ? `2px solid ${GREEN_DARK}` : "2px solid #E2EADD", boxShadow: on ? "0 10px 24px rgba(25,69,54,0.28)" : "none", transition: `all 240ms ${EASE}` }}
+            >
+              {isBest && (
+                <span style={{ position: "absolute", top: -9, right: 10, background: LIME, color: GREEN_DARK, fontSize: 9.5, fontWeight: 800, letterSpacing: 0.6, padding: "3px 8px", borderRadius: 99, textTransform: "uppercase" }}>Best</span>
+              )}
+              <div style={{ fontSize: 12, fontWeight: 700, color: on ? "rgba(255,255,255,0.72)" : SUBT, letterSpacing: 0.4 }}>{t.title}</div>
+              <div style={{ fontSize: 15.5, fontWeight: 800, color: on ? LIME : INK, marginTop: 5, letterSpacing: -0.3 }}>{idr(sys.prices[t.id])}</div>
+            </button>
+          );
+        })}
+      </div>
+
+      {/* yang kamu dapat */}
+      <div style={{ background: CARD, borderRadius: 22, padding: "6px 18px", marginTop: 16, boxShadow: "0 10px 28px rgba(31,43,22,0.07)" }}>
+        {PLAN_FEATURES.map((f, i) => {
+          const inc = plan === "full" ? f.full : f.system;
+          return (
+            <div key={i} style={{ display: "flex", alignItems: "center", gap: 12, padding: "13px 0", borderBottom: i === PLAN_FEATURES.length - 1 ? "none" : "1px solid #F0F4EE" }}>
+              <span style={{ width: 30, height: 30, borderRadius: 10, background: inc ? "#F2F8E4" : "#FDEDE8", display: "grid", placeItems: "center", flex: "0 0 auto" }}>
+                {inc ? <IconCheck /> : <IconCross />}
+              </span>
+              <span style={{ fontFamily: FONT, fontSize: 14.5, fontWeight: 500, color: inc ? INK : "#A9B4A2", textDecoration: inc ? "none" : "line-through" }}>{f.name(sys.holes)}</span>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* total */}
+      <div style={{ marginTop: 16, background: `linear-gradient(135deg, ${GREEN_DARK}, ${GREEN_DARK2})`, borderRadius: 22, padding: "20px 22px", display: "flex", justifyContent: "space-between", alignItems: "center", boxShadow: "0 14px 30px rgba(25,69,54,0.32)" }}>
+        <div>
+          <div style={{ fontFamily: FONT, fontSize: 12, fontWeight: 700, color: "rgba(255,255,255,0.75)", letterSpacing: 0.7, textTransform: "uppercase" }}>{planLabel}</div>
+          <div style={{ fontFamily: FONT, fontSize: 12.5, color: "rgba(255,255,255,0.6)", marginTop: 3 }}>{sys.holes} lubang tanam</div>
+        </div>
+        <AnimatedPrice value={sys.prices[plan]} style={{ fontFamily: FONT, fontSize: 22, fontWeight: 800, color: LIME, letterSpacing: -0.3 }} />
+      </div>
+      <div style={{ fontFamily: FONT, fontSize: 12.5, color: SUBT, textAlign: "center", marginTop: 10 }}>
+        * Harga belum termasuk ongkos kirim
       </div>
     </div>
   );
@@ -620,6 +780,14 @@ function VideoCard() {
         <div style={{ fontFamily: FONT, fontSize: 16, fontWeight: 700, color: INK }}>Lihat Lego Hydroponic SMAY!</div>
       </div>
     </Card>
+  );
+}
+
+function IconWA({ size = 19 }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" style={{ flex: "0 0 auto" }}>
+      <path d="M12 2a10 10 0 00-8.6 15L2 22l5.2-1.4A10 10 0 1012 2zm0 2a8 8 0 110 16 8 8 0 01-4.1-1.1l-.3-.2-2.6.7.7-2.5-.2-.3A8 8 0 0112 4zm4.3 10c-.2-.1-1.3-.7-1.5-.7-.2-.1-.3-.1-.5.1s-.5.7-.7.8c-.1.2-.2.2-.4.1a6 6 0 01-3-2.6c-.2-.4.2-.4.6-1.2.1-.1 0-.3 0-.4l-.7-1.6c-.2-.4-.4-.4-.5-.4h-.5c-.2 0-.4 0-.6.3a2.5 2.5 0 00-.8 1.9c0 1.1.8 2.2 1 2.4.1.1 1.6 2.5 4 3.4 1.5.6 2 .6 2.7.5.5 0 1.3-.5 1.5-1.1.2-.5.2-1 .1-1.1l-.7-.4z" />
+    </svg>
   );
 }
 
@@ -673,11 +841,16 @@ function StepSummary({ onBack }) {
         ))}
       </div>
 
-      <div style={{ marginTop: 26 }}>
+      {/* pricing digabung ke sini */}
+      <div style={{ marginTop: 32 }}>
+        <PricingSection />
+      </div>
+
+      <div style={{ marginTop: 30 }}>
         <VideoCard />
       </div>
 
-      {/* FINAL hero - dark green card */}
+      {/* FINAL hero */}
       <div style={{ position: "relative", marginTop: 34, borderRadius: 28, overflow: "hidden", background: `linear-gradient(165deg, ${GREEN_DARK}, ${GREEN_DARK2})`, boxShadow: "0 18px 40px rgba(25,69,54,0.42)" }}>
         <div style={{ padding: "30px 24px 28px", textAlign: "center" }}>
           <div style={{ display: "flex", justifyContent: "center" }}>
@@ -688,23 +861,15 @@ function StepSummary({ onBack }) {
           <h2 style={{ fontFamily: FONT, fontSize: 28, fontWeight: 800, color: LIME, margin: "8px 0 0", letterSpacing: -0.5, lineHeight: 1.1 }}>
             Siap punya kebun sendiri?
           </h2>
-
-          {/* feature chips with lime check */}
-          <div style={{ display: "flex", flexDirection: "column", gap: 10, marginTop: 20, textAlign: "left" }}>
-            {["Pelatihan gratis", "Pendampingan penuh", "Sampai berhasil panen"].map((t) => (
-              <div key={t} style={{ display: "flex", alignItems: "center", gap: 12, background: "rgba(195,229,51,0.12)", border: "1px solid rgba(195,229,51,0.32)", borderRadius: 14, padding: "12px 14px" }}>
-                <span style={{ width: 22, height: 22, borderRadius: 99, background: LIME, display: "grid", placeItems: "center", flex: "0 0 auto" }}>
-                  <Check />
-                </span>
-                <span style={{ fontFamily: FONT, fontSize: 14.5, fontWeight: 600, color: "#fff" }}>{t}</span>
-              </div>
-            ))}
-          </div>
+          <p style={{ fontFamily: FONT, fontSize: 15, color: "rgba(255,255,255,0.85)", lineHeight: 1.55, marginTop: 10, fontWeight: 500 }}>
+            Kamu bisa tanya-tanya terkait system hydroponic SMAY! sekarang.
+          </p>
 
           <div ref={ctaRef} style={{ marginTop: 22, minHeight: 58 }}>
             {!ctaSticky && (
-              <Button pulse onClick={() => { window.location.href = "/pricelist"; }} style={{ whiteSpace: "nowrap", fontSize: 15.5, padding: "17px 12px" }}>
-                Info System Hydroponic SMAY!
+              <Button pulse onClick={() => window.open(WHATSAPP_URL, "_blank")} style={{ whiteSpace: "nowrap", fontSize: 15.5, padding: "17px 12px", display: "flex", alignItems: "center", justifyContent: "center", gap: 9 }}>
+                <IconWA />
+                Konsultasi Dengan Tim SMAY!
               </Button>
             )}
           </div>
@@ -718,7 +883,7 @@ function StepSummary({ onBack }) {
           atau ikutin dulu movement Smay buat turning urban farming into a lifestyle.
         </p>
         <Button onClick={() => window.open(SHOPEE_URL, "_blank")}>
-          Bak Hydroponic
+          Lihat Informasi Bak Hydroponic
         </Button>
 
         {/* pemisah "atau" */}
@@ -742,8 +907,9 @@ function StepSummary({ onBack }) {
       {ctaSticky && (
         <div style={{ position: "fixed", left: 0, right: 0, bottom: 0, zIndex: 50, display: "flex", justifyContent: "center", pointerEvents: "none", animation: `toastUp 300ms ${EASE} both` }}>
           <div style={{ width: "100%", maxWidth: 430, boxSizing: "border-box", padding: "14px 22px calc(16px + env(safe-area-inset-bottom))", background: `linear-gradient(180deg, rgba(238,245,234,0) 0%, ${MINT_BOT} 38%)`, pointerEvents: "auto" }}>
-            <Button pulse onClick={() => { window.location.href = "/pricelist"; }} style={{ whiteSpace: "nowrap", fontSize: 15.5, padding: "17px 12px" }}>
-              Info System Hydroponic SMAY!
+            <Button pulse onClick={() => window.open(WHATSAPP_URL, "_blank")} style={{ whiteSpace: "nowrap", fontSize: 15.5, padding: "17px 12px", display: "flex", alignItems: "center", justifyContent: "center", gap: 9 }}>
+              <IconWA />
+              Konsultasi Dengan Tim SMAY!
             </Button>
           </div>
         </div>
@@ -759,11 +925,24 @@ export default function App() {
   const [page, setPage] = useState(0);
   const [name, setName] = useState("");
   const budgetSeen = useRef(false); // animate budget only once, ever
+  const deepLinked = useRef(false);
 
   // disable browser scroll restoration once
   useEffect(() => {
     if (typeof history !== "undefined" && "scrollRestoration" in history) {
       history.scrollRestoration = "manual";
+    }
+  }, []);
+
+  // deep link: /#pricing (atau ?p=3) -> langsung ke Page 3, skip animasi budget
+  useEffect(() => {
+    const h = (window.location.hash || "").toLowerCase();
+    const q = new URLSearchParams(window.location.search);
+    const wantPricing = h === "#pricing" || h === "#harga" || q.get("p") === "3";
+    if (wantPricing) {
+      deepLinked.current = true;
+      budgetSeen.current = true; // supaya kalau user mundur ke Page 2, tak animasi ulang
+      setPage(2);
     }
   }, []);
 
@@ -801,7 +980,7 @@ export default function App() {
   const pages = [
     <StepWelcome key="w" onNext={(n) => go(1, n)} />,
     <StepBudget key="b" name={name || "teman"} instant={budgetSeen.current} onAnimated={() => { budgetSeen.current = true; }} onNext={() => go(2)} onBack={() => go(0)} />,
-    <StepSummary key="s" onBack={() => go(1)} />,
+    <StepSummary key="s" onBack={deepLinked.current ? null : () => go(1)} />,
   ];
 
   return (
@@ -822,6 +1001,7 @@ export default function App() {
         @keyframes sway { 0%,100% { transform: rotate(-2.5deg);} 50% { transform: rotate(2.5deg);} }
         @keyframes popBubble { from { opacity: 0; transform: translateY(8px) scale(0.9);} to { opacity: 1; transform: translateY(0) scale(1);} }
         @keyframes toastUp { from { opacity: 0; transform: translateY(10px);} to { opacity: 1; transform: translateY(0);} }
+        @keyframes riseIn { from { opacity: 0; transform: translateY(12px);} to { opacity: 1; transform: translateY(0);} }
         @keyframes segShine { 0%,100% { filter: brightness(1);} 50% { filter: brightness(1.12);} }
         .caret { color: currentColor; opacity: 0.7; animation: blink 900ms step-end infinite; margin-left: 1px; }
         @keyframes blink { 0%,100% { opacity: 0.7;} 50% { opacity: 0;} }
