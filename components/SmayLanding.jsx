@@ -26,9 +26,17 @@ const EASE = "cubic-bezier(0.22, 1, 0.36, 1)";
 
 const FONT = "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif";
 
+const WA_NUMBER = "6285159510611";
+// pesan default (kalau belum pilih varian)
 const WHATSAPP_URL =
-  "https://wa.me/6285159510611?text=" +
-  encodeURIComponent("Halo Smay! Aku mau minta pricelist Lego Hydroponic 🌱");
+  "https://wa.me/" + WA_NUMBER + "?text=" +
+  encodeURIComponent("Halo SMAY! Aku mau konsultasi soal system hydroponic. Boleh dibantu info lebih lanjut?");
+// pesan yang menyebut varian terpilih
+const waLink = (holes, planLabel, price) =>
+  "https://wa.me/" + WA_NUMBER + "?text=" +
+  encodeURIComponent(
+    `Halo SMAY! Aku tertarik dengan system hydroponic ${holes} lubang tanam (${planLabel} - ${idr(price)}).\n\nBoleh dibantu info lebih lanjut?`
+  );
 const LYNK_URL = "https://lynk.id/smayranger";
 const SHOPEE_URL = "https://shopee.co.id/opaanlp/93053250/23126882937";
 const TIKTOK_URL = "https://www.tiktok.com/@smayranger/video/7645276478086728968";
@@ -648,11 +656,16 @@ function AnimatedPrice({ value, style }) {
   );
 }
 
-function PricingSection() {
+function PricingSection({ onChange }) {
   const [holes, setHoles] = useState(72);
   const [plan, setPlan] = useState("full");
   const sys = SYSTEMS[holes];
   const planLabel = plan === "full" ? "Full Package" : "System Only";
+
+  // laporkan pilihan ke parent supaya tombol WA bawa varian yang benar
+  useEffect(() => {
+    onChange && onChange({ holes, planLabel, price: sys.prices[plan] });
+  }, [holes, plan, planLabel, sys, onChange]);
 
   return (
     <div>
@@ -802,6 +815,9 @@ function Check() {
 function StepSummary({ onBack }) {
   const ctaRef = useRef(null);
   const [ctaSticky, setCtaSticky] = useState(true);
+  const [pick, setPick] = useState(null); // varian pricing yang dipilih
+  const handlePick = useCallback((p) => setPick(p), []);
+  const waHref = pick ? waLink(pick.holes, pick.planLabel, pick.price) : WHATSAPP_URL;
 
   useEffect(() => {
     const el = ctaRef.current;
@@ -843,7 +859,7 @@ function StepSummary({ onBack }) {
 
       {/* pricing digabung ke sini */}
       <div style={{ marginTop: 32 }}>
-        <PricingSection />
+        <PricingSection onChange={handlePick} />
       </div>
 
       <div style={{ marginTop: 30 }}>
@@ -867,7 +883,7 @@ function StepSummary({ onBack }) {
 
           <div ref={ctaRef} style={{ marginTop: 22, minHeight: 58 }}>
             {!ctaSticky && (
-              <Button pulse onClick={() => window.open(WHATSAPP_URL, "_blank")} style={{ whiteSpace: "nowrap", fontSize: 15.5, padding: "17px 12px", display: "flex", alignItems: "center", justifyContent: "center", gap: 9 }}>
+              <Button pulse onClick={() => window.open(waHref, "_blank")} style={{ whiteSpace: "nowrap", fontSize: 15.5, padding: "17px 12px", display: "flex", alignItems: "center", justifyContent: "center", gap: 9 }}>
                 <IconWA />
                 Konsultasi Dengan Tim SMAY!
               </Button>
@@ -907,7 +923,7 @@ function StepSummary({ onBack }) {
       {ctaSticky && (
         <div style={{ position: "fixed", left: 0, right: 0, bottom: 0, zIndex: 50, display: "flex", justifyContent: "center", pointerEvents: "none", animation: `toastUp 300ms ${EASE} both` }}>
           <div style={{ width: "100%", maxWidth: 430, boxSizing: "border-box", padding: "14px 22px calc(16px + env(safe-area-inset-bottom))", background: `linear-gradient(180deg, rgba(238,245,234,0) 0%, ${MINT_BOT} 38%)`, pointerEvents: "auto" }}>
-            <Button pulse onClick={() => window.open(WHATSAPP_URL, "_blank")} style={{ whiteSpace: "nowrap", fontSize: 15.5, padding: "17px 12px", display: "flex", alignItems: "center", justifyContent: "center", gap: 9 }}>
+            <Button pulse onClick={() => window.open(waHref, "_blank")} style={{ whiteSpace: "nowrap", fontSize: 15.5, padding: "17px 12px", display: "flex", alignItems: "center", justifyContent: "center", gap: 9 }}>
               <IconWA />
               Konsultasi Dengan Tim SMAY!
             </Button>
