@@ -1,8 +1,8 @@
 import "./globals.css";
 import { Analytics } from "@vercel/analytics/react";
 
-const TITLE = "SMAY! Hydroponic System";
-const DESC = "Grow your own fresh greens, effortlessly. Sistem hidroponik siap pasang, dibimbing sampai panen.";
+const TITLE = "Siap Punya Kebun Sendiri? - SMAY!";
+const DESC = "Lihat breakdown biaya bikin sistem hidroponik 72 lubang, dan kenapa Smay bikin semuanya jadi lebih gampang.";
 
 export const metadata = {
   title: TITLE,
@@ -21,7 +21,6 @@ export const metadata = {
     description: DESC,
     images: ["/og-image.png"],
   },
-  icons: { icon: "/og-image.png" },
 };
 
 export const viewport = {
